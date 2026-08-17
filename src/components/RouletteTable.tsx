@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   WHEEL_ORDER,
   betKey,
@@ -12,7 +12,7 @@ import {
 import { cryptoRng } from "../lib/rng";
 import { formatChips } from "../lib/format";
 import { useCasino } from "../state/casino";
-import { BetRail, OutcomeBanner, StakeReadout } from "./ui";
+import { BetRail, OutcomeBanner, StakeReadout, TableMeta } from "./ui";
 
 const SLICE = 360 / 37;
 
@@ -32,19 +32,27 @@ function addWager(wagers: RouletteWager[], bet: RouletteBetKind, amount: number)
 }
 
 export function RouletteTable() {
-  const { chip, spend, payout } = useCasino();
+  const { chip, spend, payout, credit, sfx } = useCasino();
   const [wagers, setWagers] = useState<RouletteWager[]>([]);
   const [spinning, setSpinning] = useState(false);
   const [rotation, setRotation] = useState(0);
   const [result, setResult] = useState<number | null>(null);
-  const [message, setMessage] = useState("Lay chips on the layout, then spin.");
+  const [message, setMessage] = useState("Click a number or color to drop a chip, then spin.");
+  const spinTimer = useRef<number | null>(null);
   const stake = wagers.reduce((sum, w) => sum + w.amount, 0);
   const bg = useMemo(() => wheelBackground(), []);
+
+  useEffect(() => {
+    return () => {
+      if (spinTimer.current) window.clearTimeout(spinTimer.current);
+    };
+  }, []);
 
   function place(bet: RouletteBetKind) {
     if (spinning) return;
     if (!spend("roulette", `Roulette ${betLabel(bet)}`, chip)) {
       setMessage("Not enough chips for that chip size.");
+      sfx("lose");
       return;
     }
     setWagers((current) => addWager(current, bet, chip));
@@ -53,7 +61,7 @@ export function RouletteTable() {
 
   function clearBoard() {
     if (spinning || stake === 0) return;
-    payout("roulette", "Roulette bets returned", stake);
+    credit("roulette", "Roulette bets returned", stake);
     setWagers([]);
     setResult(null);
     setMessage("Bets returned to your tray.");
@@ -67,17 +75,20 @@ export function RouletteTable() {
     const desired = (360 - index * SLICE) % 360;
     setSpinning(true);
     setResult(null);
+    sfx("spin");
     setRotation((current) => {
       const normalized = ((current % 360) + 360) % 360;
       const delta = (desired - normalized + 360) % 360;
       return current + extra + delta;
     });
-    window.setTimeout(() => {
+    spinTimer.current = window.setTimeout(() => {
       const settled = settleRoulette(wagers, n);
       setResult(n);
       setSpinning(false);
       if (settled.returned > 0) {
         payout("roulette", `Roulette ${n} paid`, settled.returned);
+      } else {
+        sfx("lose");
       }
       const hitNames = settled.winners.map((w) => betLabel(w.bet)).join(", ");
       setMessage(
@@ -89,10 +100,12 @@ export function RouletteTable() {
     }, 2800);
   }
 
-  const tone = result === null ? "idle" : message.includes("paid") ? "win" : "lose";
+  const tone = message.includes("paid") ? "win" : message.includes("keeps") ? "lose" : "idle";
 
   return (
-    <div className="table-wrap roulette-wrap">
+    <div className="table-wrap">
+      <TableMeta game="roulette" extra={stake ? `on the layout ${formatChips(stake)}` : "click to bet"} />
+      <div className="roulette-stage">
       <div className="wheel-col">
         <div className="wheel-frame">
           <div className="wheel-pointer" />
@@ -111,6 +124,7 @@ export function RouletteTable() {
         </div>
       </div>
       <div className="felt roulette-felt">
+        <div className="roulette-board">
         <div className="roulette-grid">
           <button
             type="button"
@@ -196,6 +210,8 @@ export function RouletteTable() {
           </div>
         </div>
       </div>
+      </div>
+    </div>
     </div>
   );
 }

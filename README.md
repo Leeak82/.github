@@ -23,6 +23,14 @@ npm run dev
 
 Then open the URL Vite prints (usually `http://localhost:5173`).
 
+If Windows PowerShell blocks `npm` (`running scripts is disabled`), either:
+
+```powershell
+Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+```
+
+or call `npm.cmd install` and `npm.cmd run dev`.
+
 ```bash
 npm test
 npm run build

@@ -396,6 +396,19 @@ footer {
   transform: translateY(-3px);
 }
 
+.chip:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.playing-card.ghost {
+  background: transparent;
+  box-shadow: none;
+  border: 2px dashed rgba(243, 234, 214, 0.22);
+  animation: none;
+}
+
 .chip-green {
   background: #1f7a4d;
 }
@@ -475,9 +488,15 @@ footer {
   color: var(--gold);
 }
 
-.roulette-wrap {
+.roulette-stage {
+  display: grid;
   grid-template-columns: 280px 1fr;
+  gap: 18px;
   align-items: start;
+}
+
+.roulette-board {
+  min-width: 720px;
 }
 
 .wheel-col {
@@ -763,7 +782,7 @@ footer {
 }
 
 .ledger {
-  position: fixed;
+  position: absolute;
   top: 86px;
   right: max(16px, calc((100% - 1180px) / 2));
   width: min(360px, calc(100% - 32px));
@@ -821,8 +840,189 @@ footer {
   color: var(--muted);
 }
 
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.gate {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background:
+    radial-gradient(900px 400px at 50% 0%, rgba(232, 200, 114, 0.18), transparent 55%),
+    var(--void);
+}
+
+.gate-card {
+  width: min(520px, 100%);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  padding: 36px 32px;
+  background: var(--panel);
+  text-align: center;
+}
+
+.gate-card h1 {
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(36px, 6vw, 56px);
+  margin: 8px 0 12px;
+}
+
+.gate-card p {
+  color: var(--muted);
+  line-height: 1.5;
+}
+
+.floor-nav {
+  display: flex;
+  gap: 6px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.floor-nav button {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 12px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.floor-nav button.active,
+.floor-nav button:hover {
+  border-color: var(--line);
+  color: var(--ivory);
+}
+
+.floor-nav button.active {
+  color: var(--gold);
+}
+
+.how-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0;
+  margin: 28px 0 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.how-strip li {
+  counter-increment: step;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 14px 8px 12px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.how-strip li::before {
+  content: counter(step) ".";
+  color: var(--gold);
+  margin-right: 8px;
+}
+
+.game-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.game-glyph {
+  position: absolute;
+  right: 16px;
+  top: 12px;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 42px;
+  color: rgba(232, 200, 114, 0.22);
+}
+
+.table-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: start;
+}
+
+.limits {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.how-to {
+  max-width: 520px;
+}
+
+.how-to summary {
+  cursor: pointer;
+  color: var(--gold);
+  list-style: none;
+}
+
+.how-to summary::-webkit-details-marker {
+  display: none;
+}
+
+.how-to ol {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.icon-btn {
+  background: rgba(17, 13, 24, 0.8);
+  border: 1px solid var(--line);
+  color: var(--ivory);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+.balance.flash strong {
+  animation: flashGold 420ms ease;
+}
+
+@keyframes flashGold {
+  from {
+    color: #fff6d2;
+  }
+  to {
+    color: var(--gold);
+  }
+}
+
+.payline-tag {
+  text-align: center;
+  margin: 0 0 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: var(--gold);
+}
+
+.ledger-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 5, 12, 0.55);
+  z-index: 5;
+}
+
+.ledger-actions {
+  display: flex;
+  gap: 8px;
+}
+
 @media (max-width: 900px) {
-  .roulette-wrap,
+  .roulette-stage,
   .slots-wrap,
   .poker-wrap {
     grid-template-columns: 1fr;
@@ -831,15 +1031,21 @@ footer {
   .welcome {
     display: none;
   }
+
+  .topbar {
+    flex-wrap: wrap;
+  }
+
+  .floor-nav {
+    order: 3;
+    width: 100%;
+    overflow-x: auto;
+  }
 }
 
 @media (max-width: 640px) {
   .playing-card {
     width: 72px;
     height: 104px;
-  }
-
-  .number-row {
-    grid-template-columns: repeat(6, minmax(36px, 1fr));
   }
 }
