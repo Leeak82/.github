@@ -3,16 +3,18 @@
   --ink: #110d18;
   --panel: #1a1524;
   --line: rgba(232, 200, 114, 0.28);
-  --gold: #e8c872;
-  --gold-deep: #9a7430;
-  --ivory: #f3ead6;
-  --muted: #b7ad9a;
-  --felt: #134233;
-  --felt-deep: #0c2c22;
-  --wine: #7a1f38;
-  --red: #d62839;
-  --win: #7dffb3;
-  --lose: #ff8b9a;
+  --gold: #ffd24a;
+  --gold-deep: #c48a12;
+  --ivory: #fff8e8;
+  --muted: #d5cbb6;
+  --felt: #0f6a45;
+  --felt-deep: #08462e;
+  --wine: #c81e4a;
+  --red: #ff2d4a;
+  --win: #5dff9a;
+  --lose: #ff8da0;
+  --neon: #39f3ff;
+  --neon-pink: #ff3d9a;
   color-scheme: dark;
 }
 
@@ -28,7 +30,7 @@ body,
 
 body {
   margin: 0;
-  font-family: Outfit, system-ui, sans-serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   background: var(--void);
   color: var(--ivory);
 }
@@ -47,9 +49,9 @@ button {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(1200px 500px at 50% -10%, rgba(232, 200, 114, 0.16), transparent 55%),
-    radial-gradient(800px 400px at 100% 80%, rgba(122, 31, 56, 0.22), transparent 50%),
-    radial-gradient(600px 300px at 0% 100%, rgba(19, 66, 51, 0.35), transparent 45%);
+    radial-gradient(1000px 480px at 50% -10%, rgba(255, 210, 74, 0.22), transparent 55%),
+    radial-gradient(800px 420px at 100% 80%, rgba(255, 61, 154, 0.2), transparent 50%),
+    radial-gradient(700px 360px at 0% 100%, rgba(57, 243, 255, 0.12), transparent 45%);
   z-index: 0;
 }
 
@@ -99,7 +101,7 @@ main {
 }
 
 .brand {
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: 28px;
   font-weight: 600;
 }
@@ -169,7 +171,7 @@ footer {
 }
 
 .hero h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: clamp(42px, 7vw, 84px);
   line-height: 0.92;
   margin: 8px 0 16px;
@@ -225,7 +227,7 @@ footer {
 }
 
 .game-card strong {
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: 32px;
   font-weight: 600;
 }
@@ -474,7 +476,7 @@ footer {
 .outcome {
   text-align: center;
   min-height: 28px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: 28px;
 }
 
@@ -660,57 +662,183 @@ footer {
 
 .cabinet {
   background:
-    linear-gradient(180deg, #3a2a12, #1b1220 28%, #120d18);
+    linear-gradient(180deg, #5a1a2a 0%, #1a1024 22%, #120818 100%);
+  box-shadow: 0 0 0 3px #ffd24a, 0 0 40px rgba(255, 61, 154, 0.25);
 }
 
 .cabinet-marquee {
-  font-family: "Cormorant Garamond", serif;
-  font-size: 36px;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  text-transform: none;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
+  font-size: 42px;
+  letter-spacing: 0.28em;
+  color: #fff36a;
+  text-transform: uppercase;
+  text-shadow: 0 0 16px #ff3d9a, 0 0 4px #ffd24a;
+  margin-bottom: 10px;
 }
 
-.reel-window {
+.marquee-lights {
+  display: flex;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.marquee-lights span {
+  flex: 1;
+  height: 10px;
+  border-radius: 99px;
+  background: #ffd24a;
+  animation: bulb 0.9s linear infinite;
+}
+
+@keyframes bulb {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.reel-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  background: #07050c;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  background: #05030a;
+  padding: 12px;
+  border-radius: 16px;
+  border: 2px solid #39f3ff;
+  box-shadow: inset 0 0 30px rgba(57, 243, 255, 0.15);
 }
 
-.reel-face {
-  background: linear-gradient(180deg, #fff7e6, #e7d7b0);
-  color: #1b1220;
-  border-radius: 12px;
-  min-height: 160px;
+.reel-cell {
+  min-height: 88px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.reel-cell.hot {
+  outline: 3px solid #fff36a;
+  box-shadow: 0 0 16px rgba(255, 210, 74, 0.7);
+}
+
+.reel-grid.spinning .slot-glyph {
+  filter: blur(2px) saturate(1.4);
+}
+
+.slot-glyph {
+  height: 88px;
   display: grid;
   place-items: center;
-  text-align: center;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
-.reel-face span {
-  font-size: 52px;
-  line-height: 1;
+.slot-glyph span {
+  font-size: 18px;
 }
 
-.reel-face.seven span,
-.reel-face.bar span,
-.reel-face.crown span {
-  font-family: "Cormorant Garamond", serif;
-  font-weight: 700;
+.sym-seven {
+  background: linear-gradient(180deg, #ff4d6a, #9b1028);
+  color: #fff;
+}
+.sym-seven span {
+  font-size: 42px;
+}
+.sym-wild {
+  background: linear-gradient(180deg, #ffe36a, #d48a00);
+  color: #2a1600;
+}
+.sym-scatter {
+  background: linear-gradient(180deg, #6d5cff, #2a157a);
+  color: #fff;
+}
+.sym-bar {
+  background: linear-gradient(180deg, #3a3a3a, #111);
+  color: #ffd24a;
+}
+.sym-bell {
+  background: linear-gradient(180deg, #ffe566, #c9a000);
+  color: #3a2a00;
+}
+.sym-grape {
+  background: linear-gradient(180deg, #b44dff, #5a1480);
+  color: #fff;
+}
+.sym-plum {
+  background: linear-gradient(180deg, #d45aa0, #7a1848);
+  color: #fff;
+}
+.sym-lemon {
+  background: linear-gradient(180deg, #fff06a, #c7b000);
+  color: #3a3200;
+}
+.sym-cherry {
+  background: linear-gradient(180deg, #ff5a5a, #8a1020);
+  color: #fff;
 }
 
-.reel-face small {
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  font-size: 11px;
+.slot-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
 }
 
-.reel-window.spinning .reel-face {
-  filter: blur(1px);
+.slot-options fieldset {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin: 0;
+  padding: 10px;
+}
+
+.slot-options legend {
+  color: var(--gold);
+  padding: 0 6px;
+}
+
+.option-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.option-row button {
+  flex: 1;
+  min-width: 44px;
+  background: #120818;
+  color: var(--ivory);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 8px 6px;
+}
+
+.option-row button.selected {
+  background: var(--gold);
+  color: #2a1c08;
+  border-color: var(--gold);
+}
+
+.game-card.game-blackjack {
+  background: linear-gradient(180deg, rgba(15, 106, 69, 0.45), var(--panel));
+}
+.game-card.game-roulette {
+  background: linear-gradient(180deg, rgba(255, 45, 74, 0.28), var(--panel));
+}
+.game-card.game-slots {
+  background: linear-gradient(180deg, rgba(255, 61, 154, 0.32), var(--panel));
+}
+.game-card.game-poker {
+  background: linear-gradient(180deg, rgba(57, 243, 255, 0.16), var(--panel));
+}
+.game-card.game-baccarat {
+  background: linear-gradient(180deg, rgba(255, 210, 74, 0.2), var(--panel));
+}
+
+.wheel-center {
+  font-size: 14px;
+  letter-spacing: 0.12em;
 }
 
 .paytable {
@@ -804,7 +932,7 @@ footer {
 }
 
 .ledger h2 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   margin: 0;
 }
 
@@ -866,7 +994,7 @@ summary:focus-visible {
 }
 
 .gate-card h1 {
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: clamp(36px, 6vw, 56px);
   margin: 8px 0 12px;
 }
@@ -937,7 +1065,7 @@ summary:focus-visible {
   position: absolute;
   right: 16px;
   top: 12px;
-  font-family: "Cormorant Garamond", serif;
+  font-family: Outfit, "Segoe UI", Arial, sans-serif;
   font-size: 42px;
   color: rgba(232, 200, 114, 0.22);
 }
@@ -1047,5 +1175,23 @@ summary:focus-visible {
   .playing-card {
     width: 72px;
     height: 104px;
+  }
+
+  .slot-options {
+    grid-template-columns: 1fr;
+  }
+
+  .reel-cell,
+  .slot-glyph {
+    min-height: 64px;
+    height: 64px;
+  }
+
+  .slot-glyph span {
+    font-size: 13px;
+  }
+
+  .sym-seven span {
+    font-size: 28px;
   }
 }

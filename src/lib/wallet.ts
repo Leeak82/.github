@@ -65,7 +65,7 @@ export function canAfford(state: WalletState, amount: number): boolean {
 }
 
 export function takeHouseMarker(state: WalletState): WalletState {
-  return applyDelta(state, "blackjack", "House marker — complimentary chips", HOUSE_MARKER);
+  return applyDelta(state, "blackjack", "Free chips from the house", HOUSE_MARKER);
 }
 
 export function resetWallet(): WalletState {

@@ -12,7 +12,7 @@ import {
 } from "./cards";
 import { dealRound, doubleDown, handValue, hit, isBlackjack, stand } from "./blackjack";
 import { betHits, settleRoulette, wheelColor } from "./roulette";
-import { settleSlots, slotsPayout } from "./slots";
+import { evaluateGrid, matchLine } from "./slots";
 import { evaluatePoker } from "./poker";
 import { baccaratPayout, baccaratTotal, playBaccarat } from "./baccarat";
 import { applyDelta, canAfford, emptyWallet, HOUSE_MARKER, takeHouseMarker } from "./wallet";
@@ -51,7 +51,7 @@ describe("blackjack", () => {
     });
   });
 
-  it("pays 3:2 on player blackjack", () => {
+  it("pays 3 to 2 on player blackjack", () => {
     const shoe = [
       c("A", "spades"),
       c("9", "hearts"),
@@ -145,11 +145,32 @@ describe("roulette", () => {
 });
 
 describe("slots", () => {
-  it("pays three crowns and cherry leftovers", () => {
-    expect(slotsPayout(["crown", "crown", "crown"]).multiplier).toBe(100);
-    expect(slotsPayout(["cherry", "lemon", "cherry"]).multiplier).toBe(2);
-    expect(slotsPayout(["bell", "bar", "seven"]).multiplier).toBe(0);
-    expect(settleSlots(["seven", "seven", "seven"], 5).returned).toBe(250);
+  it("pays five sevens on the center line", () => {
+    const grid = [
+      ["lemon", "lemon", "lemon", "bar", "bar"],
+      ["seven", "seven", "seven", "seven", "seven"],
+      ["cherry", "plum", "grape", "bell", "bar"],
+    ] as const;
+    const oneLine = evaluateGrid([...grid.map((row) => [...row])], 1, 1);
+    expect(oneLine.returned).toBe(400);
+    expect(oneLine.wins[0]?.symbol).toBe("seven");
+    const threeLines = evaluateGrid([...grid.map((row) => [...row])], 3, 1);
+    expect(threeLines.returned).toBe(400 + 5);
+  });
+
+  it("lets wilds complete a line and pays stars anywhere", () => {
+    expect(matchLine(["wild", "wild", "seven", "seven", "bar"])).toEqual({
+      symbol: "seven",
+      count: 4,
+    });
+    const grid = [
+      ["scatter", "lemon", "plum", "grape", "bell"],
+      ["bar", "scatter", "seven", "bar", "cherry"],
+      ["lemon", "plum", "scatter", "bell", "bar"],
+    ] as const;
+    const result = evaluateGrid([...grid.map((row) => [...row])], 20, 2);
+    expect(result.scatterCount).toBe(3);
+    expect(result.scatterPay).toBe(2 * 20 * 2);
   });
 });
 

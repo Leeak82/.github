@@ -36,7 +36,7 @@ export function VideoPoker() {
     sfx("deal");
     setEvalLabel(preview.rank === "nothing" ? "" : preview.label);
     setMessage(
-      preview.rank === "nothing" ? "Click cards to hold, then draw." : `${preview.label} — hold or draw.`,
+      preview.rank === "nothing" ? "Click cards to hold, then draw." : `${preview.label} - hold or draw.`,
     );
   }
 
@@ -63,7 +63,7 @@ export function VideoPoker() {
     setDeck(remaining);
     setPhase("settled");
     setEvalLabel(result.label);
-    setMessage(returned > 0 ? `${result.label} — paid ${formatChips(returned)}` : "Nothing. Deal again.");
+    setMessage(returned > 0 ? `${result.label} - paid ${formatChips(returned)}` : "Nothing. Deal again.");
   }
 
   const tone = message.includes("paid") ? "win" : phase === "settled" ? "lose" : "idle";
@@ -74,7 +74,7 @@ export function VideoPoker() {
       <div>
         <TableMeta game="poker" extra="click a card to hold" />
         <div className="felt poker-felt">
-          <p className="table-title">Jacks or Better • 9 / 6 pay table</p>
+          <p className="table-title">Jacks or Better. 9/6 pay table.</p>
           <div className="poker-hand">
             {slots.map((card, i) => (
               <button

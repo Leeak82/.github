@@ -1,6 +1,6 @@
-export type Sfx = "chip" | "deal" | "win" | "lose" | "spin" | "click";
+export type Sfx = "chip" | "deal" | "win" | "lose" | "spin" | "click" | "reel";
 
-const MUTE_KEY = "midnight-crown-muted";
+const MUTE_KEY = "midnight-crown-sound-off";
 
 export function loadMuted(): boolean {
   if (typeof localStorage === "undefined") return false;
@@ -16,63 +16,74 @@ let ctx: AudioContext | null = null;
 
 function audio(): AudioContext | null {
   if (typeof window === "undefined") return null;
-  const Ctor = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+  const Ctor =
+    window.AudioContext ||
+    (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
   if (!Ctor) return null;
   ctx ??= new Ctor();
   return ctx;
 }
 
 export function unlockAudio(): void {
-  void audio()?.resume();
+  const ac = audio();
+  if (!ac) return;
+  if (ac.state === "suspended") void ac.resume();
+}
+
+function tone(
+  ac: AudioContext,
+  freq: number,
+  offset: number,
+  duration: number,
+  type: OscillatorType,
+  gain: number,
+) {
+  const osc = ac.createOscillator();
+  const amp = ac.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, ac.currentTime + offset);
+  amp.gain.setValueAtTime(Math.max(gain, 0.001), ac.currentTime + offset);
+  amp.gain.linearRampToValueAtTime(0.0001, ac.currentTime + offset + duration);
+  osc.connect(amp);
+  amp.connect(ac.destination);
+  osc.start(ac.currentTime + offset);
+  osc.stop(ac.currentTime + offset + duration + 0.02);
 }
 
 export function playSfx(kind: Sfx, muted: boolean): void {
   if (muted) return;
   const ac = audio();
   if (!ac) return;
-  void ac.resume();
-  const now = ac.currentTime;
-
-  const beep = (
-    freq: number,
-    offset: number,
-    duration = 0.08,
-    type: OscillatorType = "triangle",
-    gain = 0.045,
-  ) => {
-    const osc = ac.createOscillator();
-    const g = ac.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, now + offset);
-    g.gain.setValueAtTime(gain, now + offset);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + offset + duration);
-    osc.connect(g);
-    g.connect(ac.destination);
-    osc.start(now + offset);
-    osc.stop(now + offset + duration + 0.02);
-  };
+  if (ac.state === "suspended") void ac.resume();
 
   switch (kind) {
     case "chip":
-      beep(440, 0, 0.05, "square", 0.03);
+      tone(ac, 520, 0, 0.09, "square", 0.12);
       break;
     case "click":
-      beep(920, 0, 0.04, "square", 0.02);
+      tone(ac, 880, 0, 0.05, "square", 0.1);
+      break;
+    case "reel":
+      tone(ac, 240, 0, 0.06, "square", 0.08);
       break;
     case "deal":
-      beep(310, 0, 0.06);
-      beep(390, 0.05, 0.07);
+      tone(ac, 330, 0, 0.08, "triangle", 0.14);
+      tone(ac, 420, 0.07, 0.1, "triangle", 0.14);
       break;
     case "spin":
-      beep(196, 0, 0.22, "sawtooth", 0.02);
+      tone(ac, 180, 0, 0.12, "sawtooth", 0.1);
+      tone(ac, 260, 0.1, 0.12, "sawtooth", 0.08);
+      tone(ac, 140, 0.22, 0.18, "sawtooth", 0.08);
       break;
     case "win":
-      beep(523, 0, 0.09);
-      beep(659, 0.09, 0.09);
-      beep(784, 0.18, 0.16);
+      tone(ac, 523.25, 0, 0.12, "triangle", 0.16);
+      tone(ac, 659.25, 0.1, 0.12, "triangle", 0.16);
+      tone(ac, 783.99, 0.2, 0.18, "triangle", 0.18);
+      tone(ac, 1046.5, 0.32, 0.22, "triangle", 0.14);
       break;
     case "lose":
-      beep(140, 0, 0.2, "sine", 0.05);
+      tone(ac, 196, 0, 0.12, "sine", 0.12);
+      tone(ac, 146, 0.1, 0.2, "sine", 0.1);
       break;
   }
 }

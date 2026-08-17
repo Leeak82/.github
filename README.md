@@ -1,18 +1,16 @@
 # Midnight Crown Casino
 
-A play-money web casino with five tables, a persistent chip wallet, and house rules encoded in tested game engines.
+A free-play web casino. Chips are not money. There are no deposits, withdrawals, or real bets. This project is not connected to any real casino.
 
-Chips have no cash value. There are no deposits, withdrawals, or real-money wagers.
+## Games
 
-## Tables
+- **Blackjack** - six-deck shoe, dealer stands on 17, blackjack pays 3 to 2, double allowed
+- **Roulette** - European wheel with one zero
+- **Lucky 7 Slots** - five reels, 1 to 20 paylines, Wilds, Stars, coin sizes, Max Bet
+- **Video Poker** - Jacks or Better, 9/6 pay table
+- **Baccarat** - Player, Banker, or Tie. Banker wins pay 0.95 to 1
 
-- **Blackjack** — six-deck shoe, dealer stands on 17, naturals pay 3:2, double on the first two cards
-- **Roulette** — European single-zero wheel with inside and outside bets
-- **Crown Slots** — three-reel, one-line machine
-- **Video Poker** — Jacks or Better, 9/6 pay table
-- **Baccarat** — punto banco with the standard third-card tableau and 5% banker commission
-
-The bankroll starts at 10,000 chips and is stored in the browser. Open the chip tray in the header to read the ledger, reset, or take a house marker when the tray is empty.
+You start with 10,000 chips saved in the browser. Click **Chips** for history. If you run out, click **Free chips**.
 
 ## Run locally
 
@@ -21,17 +19,19 @@ npm install
 npm run dev
 ```
 
-Then open the URL Vite prints (usually `http://localhost:5173`).
+Open the URL Vite prints (usually `http://localhost:5173`).
 
-If Windows PowerShell blocks `npm` (`running scripts is disabled`), either:
+If Windows PowerShell blocks `npm` (`running scripts is disabled`):
 
 ```powershell
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 ```
 
-or call `npm.cmd install` and `npm.cmd run dev`.
+or use `npm.cmd install` and `npm.cmd run dev`.
 
 ```bash
 npm test
 npm run build
 ```
+
+Sound starts after you click **Play now** or **Sound: On**. If you hear nothing, check that the button says **Sound: On** and that the tab is not muted.

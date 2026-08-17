@@ -56,7 +56,7 @@ export function RouletteTable() {
       return;
     }
     setWagers((current) => addWager(current, bet, chip));
-    setMessage(`${betLabel(bet)} • ${formatChips(chip)} added`);
+    setMessage(`${betLabel(bet)} - ${formatChips(chip)} added`);
   }
 
   function clearBoard() {
@@ -93,14 +93,14 @@ export function RouletteTable() {
       const hitNames = settled.winners.map((w) => betLabel(w.bet)).join(", ");
       setMessage(
         settled.returned > 0
-          ? `${n} ${wheelColor(n)} — paid ${formatChips(settled.returned)} (${hitNames})`
-          : `${n} ${wheelColor(n)} — the wheel keeps the layout`,
+          ? `${n} ${wheelColor(n)} - paid ${formatChips(settled.returned)} (${hitNames})`
+          : `${n} ${wheelColor(n)} - no win`,
       );
       setWagers([]);
     }, 2800);
   }
 
-  const tone = message.includes("paid") ? "win" : message.includes("keeps") ? "lose" : "idle";
+  const tone = message.includes("paid") ? "win" : message.includes("no win") ? "lose" : "idle";
 
   return (
     <div className="table-wrap">
@@ -116,11 +116,11 @@ export function RouletteTable() {
               transform: `rotate(${rotation}deg)`,
             }}
           >
-            <div className="wheel-center">♛</div>
+            <div className="wheel-center">SPIN</div>
           </div>
         </div>
         <div className={`result-pip ${result === null ? "" : wheelColor(result)}`}>
-          {spinning ? "…" : result === null ? "—" : result}
+          {spinning ? "..." : result === null ? "-" : result}
         </div>
       </div>
       <div className="felt roulette-felt">

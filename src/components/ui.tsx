@@ -20,7 +20,7 @@ export function PlayingCard({
   if (!card || faceDown) {
     return (
       <div className="playing-card back" style={{ animationDelay: `${delay}ms` }} aria-hidden="true">
-        <div className="card-back-mark">♛</div>
+        <div className="card-back-mark">MC</div>
       </div>
     );
   }
@@ -154,7 +154,7 @@ export function HowTo({ game }: { game: GameId }) {
 export function TableMeta({ game, extra }: { game: GameId; extra?: string }) {
   return (
     <div className="table-meta">
-      <p className="limits">Table minimum 25 chips{extra ? ` • ${extra}` : ""}</p>
+      <p className="limits">Table minimum 25 chips{extra ? ` - ${extra}` : ""}</p>
       <HowTo game={game} />
     </div>
   );

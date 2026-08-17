@@ -73,8 +73,8 @@ export function BaccaratTable() {
           next.winner === "tie" ? "Tie" : next.winner === "player" ? "Player wins" : "Banker wins";
         setMessage(
           returned > 0
-            ? `${verb} • ${next.playerTotal}–${next.bankerTotal} — paid ${formatChips(returned)}`
-            : `${verb} • ${next.playerTotal}–${next.bankerTotal}`,
+            ? `${verb}, ${next.playerTotal}-${next.bankerTotal} - paid ${formatChips(returned)}`
+            : `${verb}, ${next.playerTotal}-${next.bankerTotal}`,
         );
         setDealing(false);
       }, 1600),
@@ -85,9 +85,9 @@ export function BaccaratTable() {
 
   return (
     <div className="table-wrap">
-      <TableMeta game="baccarat" extra={`8-deck shoe • ${shoe.length} left`} />
+      <TableMeta game="baccarat" extra={`8-deck shoe, ${shoe.length} left`} />
       <div className="felt baccarat-felt">
-        <p className="table-title">Punto Banco • third-card tableau enforced</p>
+        <p className="table-title">Baccarat. Player vs Banker. Extra cards are automatic.</p>
         <div className="bacc-hands">
           <div>
             <span className="hand-label">Player {round ? baccaratTotal(round.player) : ""}</span>

@@ -63,6 +63,16 @@ export function CasinoProvider({ children }: { children: ReactNode }) {
     setChip((current) => clampChip(wallet.balance, current));
   }, [wallet.balance]);
 
+  useEffect(() => {
+    const unlock = () => unlockAudio();
+    window.addEventListener("pointerdown", unlock);
+    window.addEventListener("keydown", unlock);
+    return () => {
+      window.removeEventListener("pointerdown", unlock);
+      window.removeEventListener("keydown", unlock);
+    };
+  }, []);
+
   const sfx = useCallback(
     (kind: Sfx) => {
       playSfx(kind, muted);
@@ -109,7 +119,11 @@ export function CasinoProvider({ children }: { children: ReactNode }) {
 
   const toggleMute = useCallback(() => {
     unlockAudio();
-    setMuted((current) => !current);
+    setMuted((current) => {
+      const next = !current;
+      if (!next) playSfx("win", false);
+      return next;
+    });
   }, []);
 
   const chooseChip = useCallback((value: number) => {

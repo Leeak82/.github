@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { CasinoProvider, useCasino } from "./state/casino";
 import { formatChips, signedChips } from "./lib/format";
 import { GAMES } from "./lib/catalog";
-import { unlockAudio } from "./lib/sound";
+import { unlockAudio, playSfx } from "./lib/sound";
 import { Lobby } from "./components/Lobby";
 import { BlackjackTable } from "./components/BlackjackTable";
 import { RouletteTable } from "./components/RouletteTable";
@@ -16,7 +16,7 @@ const GATE_KEY = "midnight-crown-entered";
 const TITLES: Record<GameId, string> = {
   blackjack: "Blackjack",
   roulette: "Roulette",
-  slots: "Crown Slots",
+  slots: "Lucky 7 Slots",
   poker: "Video Poker",
   baccarat: "Baccarat",
 };
@@ -26,20 +26,21 @@ function Gate({ onEnter }: { onEnter: () => void }) {
     <div className="gate">
       <div className="gate-card">
         <p className="eyebrow">Midnight Crown</p>
-        <h1>The floor is open.</h1>
+        <h1>Play for fun. No real money.</h1>
         <p>
-          This is a play-money casino. Chips never convert to cash. There are no deposits and no
-          withdrawals. You must be 18 or older to enter.
+          This is a free chip casino for entertainment. There are no deposits, no cash out, and no
+          real bets. You must be 18 or older.
         </p>
         <button
           type="button"
           className="btn gold"
           onClick={() => {
             unlockAudio();
+            playSfx("win", false);
             onEnter();
           }}
         >
-          Enter the floor
+          Play now
         </button>
       </div>
     </div>
@@ -68,10 +69,10 @@ function Shell() {
       <div className="atmosphere" aria-hidden="true" />
       <header className="topbar">
         <button type="button" className="brand" onClick={() => setView("lobby")}>
-          <span className="crown">♛</span>
+          <span className="crown">MC</span>
           <span>
             Midnight Crown
-            <small>Play-money casino</small>
+            <small>Free play casino</small>
           </span>
         </button>
         <nav className="floor-nav" aria-label="Tables">
@@ -92,10 +93,10 @@ function Shell() {
             className="icon-btn"
             onClick={toggleMute}
             aria-pressed={muted}
-            aria-label={muted ? "Unmute" : "Mute"}
-            title={muted ? "Unmute" : "Mute"}
+            aria-label={muted ? "Turn sound on" : "Turn sound off"}
+            title={muted ? "Sound is off. Click to turn on." : "Sound is on. Click to turn off."}
           >
-            {muted ? "Mute" : "Sound"}
+            {muted ? "Sound: Off" : "Sound: On"}
           </button>
           <button
             type="button"
@@ -108,7 +109,7 @@ function Shell() {
           </button>
           {broke ? (
             <button type="button" className="btn gold compact" onClick={marker}>
-              House marker
+              Free chips
             </button>
           ) : null}
         </div>
@@ -147,7 +148,7 @@ function Shell() {
                   <li key={entry.id}>
                     <span>
                       <strong>
-                        {entry.description.startsWith("House marker") ? "Cage" : TITLES[entry.game]}
+                        {entry.description.startsWith("Free chips") ? "Bank" : TITLES[entry.game]}
                       </strong>
                       <em>{entry.description}</em>
                     </span>
@@ -160,8 +161,8 @@ function Shell() {
         </div>
       ) : null}
       <footer>
-        Midnight Crown is a demonstration casino. Chips have no cash value. Intended for adults 18+.
-        {view !== "lobby" ? ` • ${TITLES[view]}` : ""}
+        Midnight Crown is a free demo. Chips are not money. Not connected to any real casino.
+        {view !== "lobby" ? ` Currently on ${TITLES[view]}.` : ""}
       </footer>
     </div>
   );

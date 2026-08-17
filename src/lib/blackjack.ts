@@ -174,7 +174,7 @@ function settleDealer(round: BlackjackRound): BlackjackRound {
 export function outcomeLabel(outcome: BlackjackOutcome): string {
   switch (outcome) {
     case "blackjack":
-      return "Blackjack — 3:2";
+      return "Blackjack 3 to 2";
     case "win":
       return "You win";
     case "push":

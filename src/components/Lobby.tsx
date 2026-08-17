@@ -1,4 +1,3 @@
-import type { GameId } from "../types";
 import { GAMES } from "../lib/catalog";
 import { formatChips } from "../lib/format";
 import { useCasino } from "../state/casino";
@@ -10,21 +9,18 @@ export function Lobby() {
   return (
     <div className="lobby">
       <section className="hero">
-        <p className="eyebrow">Play-money casino • no deposits</p>
-        <h1>
-          Fortune, staged
-          <em> under a midnight crown.</em>
-        </h1>
+        <p className="eyebrow">Free play. No deposits.</p>
+        <h1>Pick a game and play.</h1>
         <p className="lede">
-          Five tables, {formatChips(wallet.balance)} chips in your tray
-          {hands ? `, ${hands} stakes on the ledger` : ""}. Pick a table, drop a chip, and play.
-          Nothing here cashes out.
+          You have {formatChips(wallet.balance)} chips
+          {hands ? ` and ${hands} bets on your history` : ""}. Choose blackjack, roulette, slots,
+          video poker, or baccarat. Chips stay in this browser and cannot be cashed out.
         </p>
         <ol className="how-strip">
-          <li>Choose a table</li>
-          <li>Select a chip you can afford</li>
-          <li>Deal, spin, or draw</li>
-          <li>Open the tray for history</li>
+          <li>Choose a game</li>
+          <li>Set your bet</li>
+          <li>Deal or spin</li>
+          <li>Open Chips for history</li>
         </ol>
       </section>
       <section className="game-grid">
@@ -35,7 +31,7 @@ export function Lobby() {
             className={`game-card game-${game.id}`}
             onClick={() => {
               sfx("click");
-              setView(game.id as GameId);
+              setView(game.id);
             }}
           >
             <span className="game-glyph" aria-hidden="true">

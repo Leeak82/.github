@@ -121,7 +121,7 @@ export function BlackjackTable() {
     <div className="table-wrap">
       <TableMeta game="blackjack" extra={`shoe ${shoe.length} cards`} />
       <div className="felt blackjack-felt">
-        <p className="table-title">Blackjack pays 3 to 2 • Dealer stands on 17</p>
+        <p className="table-title">Blackjack pays 3 to 2. Dealer stands on 17.</p>
         <div className="hand-row dealer">
           <span className="hand-label">Dealer {round ? dealerValue : ""}</span>
           <div className="cards">
