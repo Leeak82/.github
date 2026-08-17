@@ -701,19 +701,37 @@ footer {
   }
 }
 
-.reel-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+.reels {
+  display: flex;
+  height: 288px;
+  gap: 4px;
   background: #05030a;
-  padding: 12px;
+  padding: 6px;
   border-radius: 16px;
   border: 2px solid #39f3ff;
   box-shadow: inset 0 0 30px rgba(57, 243, 255, 0.15);
 }
 
+.reel {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+  border-radius: 10px;
+  background: #0a0712;
+}
+
+.reel-window {
+  height: 100%;
+  overflow: hidden;
+}
+
+.reel-strip {
+  position: relative;
+  will-change: transform;
+}
+
 .reel-cell {
-  min-height: 88px;
+  height: 92px;
   border-radius: 10px;
   overflow: hidden;
 }
@@ -723,28 +741,56 @@ footer {
   box-shadow: 0 0 16px rgba(255, 210, 74, 0.7);
 }
 
-.reel-grid.spinning .slot-glyph {
-  filter: blur(2px) saturate(1.4);
+.jackpot {
+  margin: 0 0 12px;
+  text-align: center;
+  color: #ffd24a;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-shadow: 0 0 14px rgba(255, 210, 74, 0.55);
+}
+
+.autoplay {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--ivory);
+}
+
+.autoplay input {
+  width: 18px;
+  height: 18px;
+}
+
+.slot-credit {
+  text-align: center;
+  font-size: 11px;
+  margin: 14px 0 0;
 }
 
 .slot-glyph {
-  height: 88px;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+  height: 92px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
 }
 
-.slot-glyph span {
-  font-size: 18px;
+.slot-glyph svg {
+  width: 58px;
+  height: 52px;
+}
+
+.slot-glyph small {
+  font-size: 9px;
+  letter-spacing: 0.14em;
 }
 
 .sym-seven {
   background: linear-gradient(180deg, #ff4d6a, #9b1028);
   color: #fff;
-}
-.sym-seven span {
-  font-size: 42px;
 }
 .sym-wild {
   background: linear-gradient(180deg, #ffe36a, #d48a00);
@@ -1183,15 +1229,19 @@ summary:focus-visible {
 
   .reel-cell,
   .slot-glyph {
-    min-height: 64px;
-    height: 64px;
+    height: 72px;
   }
 
-  .slot-glyph span {
-    font-size: 13px;
+  .reels {
+    height: 228px;
   }
 
-  .sym-seven span {
-    font-size: 28px;
+  .slot-glyph svg {
+    width: 44px;
+    height: 40px;
+  }
+
+  .slot-glyph small {
+    font-size: 8px;
   }
 }

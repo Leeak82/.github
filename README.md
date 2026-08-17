@@ -6,7 +6,7 @@ A free-play web casino. Chips are not money. There are no deposits, withdrawals,
 
 - **Blackjack** - six-deck shoe, dealer stands on 17, blackjack pays 3 to 2, double allowed
 - **Roulette** - European wheel with one zero
-- **Lucky 7 Slots** - five reels, 1 to 20 paylines, Wilds, Stars, coin sizes, Max Bet
+- **Lucky 7 Slots** - five reels that spin with staggered stops (same Web Animations approach as [johakr/html5-slot-machine](https://github.com/johakr/html5-slot-machine), MIT), 1 to 20 paylines, Wilds, Stars, coin sizes, Max Bet, Autoplay
 - **Video Poker** - Jacks or Better, 9/6 pay table
 - **Baccarat** - Player, Banker, or Tie. Banker wins pay 0.95 to 1
 
